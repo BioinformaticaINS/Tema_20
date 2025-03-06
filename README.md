@@ -23,20 +23,18 @@ conda create -n annotation_01 -c bioconda prokka abricate integron_finder mgcplo
 conda create -n annotation_02 -c bioconda rgi
 ```
 
-```bash
 > **Comentario:** 
 > - `prokka`: Anotación rápida de genomas procariotas.
 > - `abricate`: Detección masiva de contigs para genes de resistencia antimicrobiana y virulencia.
 > - `integron_finder`: Detecta integrones en genomas procariotas.
 > - `mgcplotter`: Visualiza el contexto genético de un genoma.
 > - `rgi`: Identificador de genes de resistencia a antibióticos.
-```
 
-### Otras herramientas bioinformáticas en línea:
+> **Otras herramientas bioinformáticas en línea:**
 
-AntiSMASH		https://antismash.secondarymetabolites.org/#!/start 
-KAAS			https://www.genome.jp/kegg/kaas/ 
-Proksee		https://proksee.ca/ 
+> - `AntiSMASH		https://antismash.secondarymetabolites.org/#!/start 
+> - `KAAS			https://www.genome.jp/kegg/kaas/ 
+> - `Proksee		https://proksee.ca/ 
 
 
 
