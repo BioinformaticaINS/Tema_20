@@ -7,9 +7,9 @@
 3. Identificación de genes de virulencia
 4. Identificación de genes de resistencia
 5. Identificación de integrones
-6. Anotación de rutas metabolicas
-7. Anotaci
-8. Identificación de SNPs
+6. Identificación de rutas metabolicas
+7. Identificación de grupos de genes biosintéticos de metabolitos secundarios
+8. Visualización del genoma
 
 ## Metodología:
 
@@ -22,13 +22,19 @@ conda create -n annotation_01 -c bioconda prokka abricate integron_finder mgcplo
 
 conda create -n annotation_02 -c bioconda rgi
 
-```
 > **Comentario:** 
-> - `conda create`: Este es el comando base para crear un nuevo entorno Conda.
-> - `-n assembly`: Esta opción especifica el nombre del nuevo entorno como "assembly". Los entornos virtuales son como carpetas aisladas donde puedes instalar diferentes versiones de software sin que interfieran con otras instalaciones.
-> - `-c bioconda`: Esta opción indica que se debe buscar los paquetes en el canal "bioconda".
-> - `unicycler`: Un ensamblador de genomas híbrido que combina lecturas de corta y larga longitud.
-> - `flye`: Un ensamblador de genomas para lecturas de larga longitud.
-> - `quast`: Una herramienta para evaluar la calidad de los ensamblajes de genomas.
-> - `checkm-genome`: Una herramienta para evaluar la integridad y contaminación de los ensamblajes de genomas.
-> - `racon`: Una herramien
+> - `prokka`: Anotación rápida de genomas procariotas.
+> - `abricate`: Detección masiva de contigs para genes de resistencia antimicrobiana y virulencia.
+> - `integron_finder`: Detecta integrones en genomas procariotas.
+> - `mgcplotter`: Visualiza el contexto genético de un genoma.
+> - `rgi`: Identificador de genes de resistencia a antibióticos.
+```
+
+### Otras herramientas bioinformáticas en línea:
+
+AntiSMASH		https://antismash.secondarymetabolites.org/#!/start 
+KAAS			https://www.genome.jp/kegg/kaas/ 
+Proksee		https://proksee.ca/ 
+
+
+
