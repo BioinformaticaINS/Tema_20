@@ -21,7 +21,9 @@
 conda create -n annotation_01 -c bioconda prokka abricate integron_finder mgcplotter
 
 conda create -n annotation_02 -c bioconda rgi
+```
 
+```bash
 > **Comentario:** 
 > - `prokka`: Anotación rápida de genomas procariotas.
 > - `abricate`: Detección masiva de contigs para genes de resistencia antimicrobiana y virulencia.
