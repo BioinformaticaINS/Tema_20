@@ -253,11 +253,13 @@ contig_4	0	0	0	lin	1681
 
 ```bash
 Cargar el archivo m01.faa en KAAS (https://www.genome.jp/kegg/kaas/)
+
+KAAS (KEGG Automatic Annotation Server) es una herramienta que proporciona anotación funcional de genes comparándolos con la base de datos KEGG GENES, que es curada manualmente, utilizando comparaciones BLAST o GHOST. Los resultados incluyen asignaciones KO (KEGG Orthology) y rutas KEGG generadas automáticamente, lo que puede ayudar a los investigadores a comprender las funciones de los genes y sus roles en las rutas biológicas.
 ```
 
 ## 8. Visualización del genoma
 
-### OPCION 1:
+### Opción 1:
 
 ```bash
 cd ~/genomics/annotation
@@ -271,8 +273,49 @@ conda activate annotation_04
 MGCplotter -r /home/ins_user/genomics/annotation/prokka/m01.gbk -o m01_map --assign_cog_color 
 ```
 
-### OPCION 2:
+> **Comentario:** 
+> - `--assign_cog_color`: Esta opción indica a MGCplotter que asigne colores a los genes en función de sus categorías COG (Clusters of Orthologous Groups). Las categorías COG clasifican los genes según su función,
+
+```bash
+cat m01_map/cogclassifier/classifier_stats.txt 
+
+84.62% (4395 / 5194) sequences classified into COG functional category.
+
+cat m01_map/cogclassifier/classifier_count.tsv
+
+LETTER	COUNT	COLOR	DESCRIPTION
+J	264	#FCCCFC	Translation, ribosomal structure and biogenesis
+A	2	#FCDCFC	RNA processing and modification
+K	266	#FCDCEC	Transcription
+L	201	#FCDCDC	Replication, recombination and repair
+B	0	#FCDCCC	Chromatin structure and dynamics
+D	54	#FCFCDC	Cell cycle control, cell division, chromosome partitioning
+Y	0	#FCFCCC	Nuclear structure
+V	119	#FCFCBC	Defense mechanisms
+T	160	#FCFCAC	Signal transduction mechanisms
+M	267	#ECFCAC	Cell wall/membrane/envelope biogenesis
+N	106	#DCFCAC	Cell motility
+Z	0	#CCFCAC	Cytoskeleton
+W	10	#BCFCAC	Extracellular structures
+U	62	#ACFCAC	Intracellular trafficking, secretion, and vesicular transport
+O	156	#9CFCAC	Posttranslational modification, protein turnover, chaperones
+X	721	#9CFC9C	Mobilome: prophages, transposons
+C	267	#BCFCFC	Energy production and conversion
+G	373	#CCFCFC	Carbohydrate transport and metabolism
+E	363	#DCFCFC	Amino acid transport and metabolism
+F	105	#DCECFC	Nucleotide transport and metabolism
+H	187	#DCDCFC	Coenzyme transport and metabolism
+I	119	#DCCCFC	Lipid transport and metabolism
+P	205	#CCCCFC	Inorganic ion transport and metabolism
+Q	60	#BCCCFC	Secondary metabolites biosynthesis, transport and catabolism
+R	159	#E0E0E0	General function prediction only
+S	169	#CCCCCC	Function unknown
+```
+
+### Opción 2:
 
 ```bash
 Cargar el archivo m01.gbk en Proksee (https://proksee.ca/)
+
+Proksee es una herramienta en línea esencial para la visualización y análisis de genomas, especialmente bacterianos, ya que transforma datos genómicos complejos en mapas circulares y lineales interactivos y claros, facilitando la interpretación y comunicación de resultados. Además, integra herramientas de anotación y análisis, como la identificación de genes de resistencia y elementos genéticos móviles, todo accesible desde cualquier navegador, lo que agiliza la investigación genómica.
 ```
