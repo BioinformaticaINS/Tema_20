@@ -6,11 +6,10 @@
 2. Obtención de datos
 3. Anotación de un genoma
 4. Identificación de genes de virulencia
-5. Identificación de genes de resistencia
+5. Identificación de genes de resistencia a antibióticos
 6. Identificación de integrones
 7. Identificación de rutas metabolicas
-8. Identificación de grupos de genes biosintéticos de metabolitos secundarios
-9. Visualización del genoma
+8. Visualización del genoma
 
 ## Metodología:
 
@@ -19,21 +18,24 @@
 ### Instalar los siguientes programas en un ambiente de conda
 
 ```bash
-conda create -n annotation_01 -c bioconda prokka abricate integron_finder mgcplotter
+conda create -n annotation_01 -c bioconda prokka abricate
 
 conda create -n annotation_02 -c bioconda rgi
+
+conda create -n annotation_03 -c defaults -c conda-forge -c bioconda integron_finder
+
+conda create -n annotation_04 -c conda-forge -c bioconda mgcplotter biopython=1.80
 ```
 
 > **Comentario:** 
 > - `prokka`: Anotación rápida de genomas procariotas.
 > - `abricate`: Detección masiva de contigs para genes de resistencia antimicrobiana y virulencia.
+> - `rgi`: Identificador de genes de resistencia a antibióticos.
 > - `integron_finder`: Detecta integrones en genomas procariotas.
 > - `mgcplotter`: Visualiza el contexto genético de un genoma.
-> - `rgi`: Identificador de genes de resistencia a antibióticos.
 
 > **Otras herramientas bioinformáticas en línea:**
 
-> - `AntiSMASH`: https://antismash.secondarymetabolites.org/#!/start 
 > - `KAAS`: https://www.genome.jp/kegg/kaas/ 
 > - `Proksee`: https://proksee.ca/ 
 
@@ -177,3 +179,100 @@ head m01_vfdb.tab
 /home/ins_user/genomics/assembly/nanopore/m01_flye.racon.fasta	contig_1	1259355	1260371	-	fepD	1-1017/1017	===============	0/0	100.00	96.17	vfdb	NP_752608	(fepD) ferrienterobactin ABC transporter permease [Enterobactin (VF0228)] [Escherichia coli CFT073]	
 ```
 
+## 5. Identificación de genes de resistencia a antibióticos
+
+```bash
+cd ~/genomics/annotation
+
+mkdir rgi
+
+cd rgi
+
+mkdir card
+
+cd card
+
+conda activate annotation_02
+
+wget https://card.mcmaster.ca/latest/data
+
+tar -xvf data ./card.json
+
+cd ..
+
+rgi load --card_json card/card.json --local
+
+rgi main --input_sequence /home/ins_user/genomics/assembly/nanopore/m01_flye.racon.fasta --output_file m01_rgi --clean --local --num_threads 2
+```
+
+> **Comentario:** 
+> - `--clean`: Elimina archivos temporales.
+> - `--local`: Especifica que RGI debe utilizar la base de datos local instalada en tu sistema. 
+
+```bash
+head -n 2 m01_rgi.txt 
+
+ORF_ID	Contig	Start	Stop	Orientation	Cut_Off	Pass_Bitscore	Best_Hit_Bitscore	Best_Hit_ARO	Best_Identities	ARO	Model_type	SNPs_in_Best_Hit_ARO	Other_SNPs	Drug Class	Resistance Mechanism	AMR Gene Family	Predicted_DNA	Predicted_Protein	CARD_Protein_Sequence	Percentage Length of Reference Sequence	ID	Model_ID	Nudged	Note	Hit_Start	Hit_End	Antibiotic
+contig_1_165 # 169570 # 170943 # -1 # ID=1_165;partial=00;start_type=ATG;rbs_motif=None;rbs_spacer=None;gc_cont=0.547	contig_1_165	169570	170943	-	Perfect	890	926.391	cpxA	100.0	3000830	protein homolog model	n/a	n/a	aminoglycoside antibiotic; aminocoumarin antibiotic	antibiotic efflux	resistance-nodulation-cell division (RND) antibiotic efflux pump	ATGATAGGCAGCTTAACCGCGCGCATCTTCGCCATCTTCTGGCTGACGCTGGCGCTGGTGTTGATGTTGGTTTTGATGTTACCCAAGCTCGATTCACGCCAGATGACCGAGCTTCTGGATAGCGAACAGCGTCAGGGGCTGATGATTGAGCAGCATGTCGAAGCGGAGCTGGCGAACGATCCGCCCAACGATTTAATGTGGTGGCGGCGTCTGTTCCGGGCGATTGATAAGTGGGCACCGCCAGGACAGCGTTTGTTATTGGTGACCACCGAAGGCCGCGTGATCGGCGCTGAACGCAGCGAAATGCAGATCATTCGTAACTTTATTGGTCAGGCCGATAACGCCGATCATCCGCAGAAGAAAAAGTATGGCCGCGTGGAACTGGTCGGTCCGTTCTCCGTGCGTGATGGCGAAGATAATTACCAACTTTATCTGATTCGTCCGGCCAGCAGTTCTCAATCCGATTTCATTAACTTACTGTTTGACCGCCCGCTATTACTGCTGATTGTCACCATGTTGGTCAGTACGCCGCTGCTGTTGTGGTTGGCCTGGAGTCTGGCAAAACCGGCGCGTAAGCTGAAAAACGCTGCCGATGAAGTTGCCCAGGGAAACTTACGCCAGCACCCGGAACTGGAAGCGGGGCCACAGGAATTCCTTGCCGCAGGTGCCAGTTTTAACCAGATGGTCACCGCGCTGGAGCGCATGATGACCTCTCAGCAGCGTCTGCTTTCTGATATCTCTCACGAGCTGCGCACCCCGCTGACGCGTCTGCAACTGGGTACGGCGTTACTGCGCCGTCGTAGCGGTGAAAGCAAGGAACTCGAGCGTATTGAAACCGAAGCGCAACGTCTGGACAGCATGATCAACGATCTGTTGGTGATGTCACGTAATCAGCAAAAAAACGCGCTGGTTAGCGAAACCATCAAAGCCAACCAGTTGTGGAGTGAAGTGCTGGATAACGCGGCGTTCGAAGCCGAGCAAATGGGCAAGTCGTTGACAGTTAACTTCCCGCCTGGGCCGTGGCCGCTGTACGGCAATCCGAACGCCCTGGAAAGTGCGCTGGAAAACATTGTTCGTAATGCTCTGCGTTATTCCCATACGAAGATTGAAGTGGGCTTTGCGGTAGATAAAGACGGTATCACCATTACGGTGGACGACGATGGTCCTGGCGTTAGCCCGGAAGATCGCGAACAGATTTTCCGTCCGTTCTATCGGACCGATGAAGCACGCGATCGTGAATCTGGCGGTACAGGATTGGGGCTGGCGATTGTTGAAACCGCCATTCAGCAGCATCGTGGCTGGGTGAAGGCAGAAGACAGCCCGCTGGGCGGTTTACGGCTGGTGATTTGGTTGCCGCTGTATAAGCGGAGTTAA	MIGSLTARIFAIFWLTLALVLMLVLMLPKLDSRQMTELLDSEQRQGLMIEQHVEAELANDPPNDLMWWRRLFRAIDKWAPPGQRLLLVTTEGRVIGAERSEMQIIRNFIGQADNADHPQKKKYGRVELVGPFSVRDGEDNYQLYLIRPASSSQSDFINLLFDRPLLLLIVTMLVSTPLLLWLAWSLAKPARKLKNAADEVAQGNLRQHPELEAGPQEFLAAGASFNQMVTALERMMTSQQRLLSDISHELRTPLTRLQLGTALLRRRSGESKELERIETEAQRLDSMINDLLVMSRNQQKNALVSETIKANQLWSEVLDNAAFEAEQMGKSLTVNFPPGPWPLYGNPNALESALENIVRNALRYSHTKIEVGFAVDKDGITITVDDDGPGVSPEDREQIFRPFYRTDEARDRESGGTGLGLAIVETAIQQHRGWVKAEDSPLGGLRLVIWLPLYKRS	MIGSLTARIFAIFWLTLALVLMLVLMLPKLDSRQMTELLDSEQRQGLMIEQHVEAELANDPPNDLMWWRRLFRAIDKWAPPGQRLLLVTTEGRVIGAERSEMQIIRNFIGQADNADHPQKKKYGRVELVGPFSVRDGEDNYQLYLIRPASSSQSDFINLLFDRPLLLLIVTMLVSTPLLLWLAWSLAKPARKLKNAADEVAQGNLRQHPELEAGPQEFLAAGASFNQMVTALERMMTSQQRLLSDISHELRTPLTRLQLGTALLRRRSGESKELERIETEAQRLDSMINDLLVMSRNQQKNALVSETIKANQLWSEVLDNAAFEAEQMGKSLTVNFPPGPWPLYGNPNALESALENIVRNALRYSHTKIEVGFAVDKDGITITVDDDGPGVSPEDREQIFRPFYRTDEARDRESGGTGLGLAIVETAIQQHRGWVKAEDSPLGGLRLVIWLPLYKRS	100.00	gnl|BL_ORD_ID|131|hsp_num:0	152			0	1371	neomycin; amikacin; kanamycin A; tobramycin; novobiocin; gentamicin
+```
+
+## 6. Identificación de integrones
+
+```bash
+cd ~/genomics/annotation
+
+mkdir integron
+
+cd integron
+
+conda activate annotation_03
+
+integron_finder --local-max --func-annot --pdf /home/ins_user/genomics/assembly/nanopore/m01_flye.racon.fasta
+```
+
+> **Comentario:** 
+> - `--local-max`: Esta opción le dice a integron_finder que utilice un algoritmo "local-max" para la detección de integrones. Este algoritmo es más sensible para la detección de integrones atípicos o incompletos.
+> - `--func-annot`: Esta opción activa la anotación funcional de los genes encontrados dentro de los integrones. integron_finder utilizará bases de datos de proteínas para predecir la función de los genes.
+> - `--pdf`: Esta opción genera un archivo PDF con una representación gráfica de los integrones encontrados, incluyendo la ubicación de los genes y otras características.
+
+```bash
+cat Results_Integron_Finder_m01_flye.racon/m01_flye.racon.summary
+
+ID_replicon	CALIN	complete	In0	topology	size
+contig_1	1	0	0	lin	4821218
+contig_2	1	0	0	lin	89416
+contig_3	0	0	0	lin	18019
+contig_4	0	0	0	lin	1681
+```
+
+> **Comentario:** 
+> - `Observación 1`: En los resultados no se ha detectado ningún integrón completo (complete es 0 en todos los contigs) ni elementos In0 (In0 es 0 en todos los contigs).
+> - `Observación 2`: Se encontraron elementos CALIN en "contig_1" y "contig_2" (CALIN es 1). Esto sugiere que estas regiones podrían ser sitios potenciales para la formación de integrones, aunque no se detectó una estructura de integrón completa.
+
+## 7. Identificación de rutas metabolicas
+
+```bash
+Cargar el archivo m01.faa en KAAS (https://www.genome.jp/kegg/kaas/)
+```
+
+## 8. Visualización del genoma
+
+### OPCION 1:
+
+```bash
+cd ~/genomics/annotation
+
+mkdir map
+
+cd map
+
+conda activate annotation_04
+
+MGCplotter -r /home/ins_user/genomics/annotation/prokka/m01.gbk -o m01_map --assign_cog_color 
+```
+
+### OPCION 2:
+
+```bash
+Cargar el archivo m01.gbk en Proksee (https://proksee.ca/)
+```
