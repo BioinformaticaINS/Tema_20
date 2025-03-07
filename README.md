@@ -280,7 +280,9 @@ MGCplotter -r /home/ins_user/genomics/annotation/prokka/m01.gbk -o m01_map --ass
 cat m01_map/cogclassifier/classifier_stats.txt 
 
 84.62% (4395 / 5194) sequences classified into COG functional category.
+```
 
+```bash
 cat m01_map/cogclassifier/classifier_count.tsv
 
 LETTER	COUNT	COLOR	DESCRIPTION
